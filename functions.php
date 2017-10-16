@@ -117,6 +117,10 @@ add_action( 'widgets_init', 'qul_wp_starter_widgets_init' );
  * Enqueue scripts and styles.
  */
 function qul_wp_starter_scripts() {
+
+	/* Google Fonts */
+	wp_enqueue_style( 'qul-wp-starter-fonts', qul_wp_starter_fonts_url() );
+
 	wp_enqueue_style( 'qul-wp-starter-style', get_stylesheet_uri() );
 
 	wp_enqueue_script( 'qul-wp-starter-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
@@ -128,6 +132,35 @@ function qul_wp_starter_scripts() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'qul_wp_starter_scripts' );
+/**
+ * Register custom fonts.
+ */
+function qul_wp_starter_fonts_url() {
+
+	$fonts_url = '';
+
+	/*
+	 * Translators: If there are characters in your language that are not
+	 * supported by Open Sans, translate this to 'off'. Do not translate
+	 * into your own language.
+	 */
+	$open_sans = _x( 'on', 'Open Sans font: on or off', 'qul-basic' );
+
+	if ( 'off' !== $open_sans ) {
+		$font_families = array();
+
+		$font_families[] = 'Open Sans:300,400,400i,700,700i';
+
+		$query_args = array(
+			'family' => urlencode( implode( '|', $font_families ) ),
+			'subset' => urlencode( 'latin,latin-ext' ),
+		);
+
+		$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
+	}
+
+	return esc_url_raw( $fonts_url );
+}
 
 /**
  * Implement the Custom Header feature.
@@ -156,3 +189,10 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+/**
+ * Remove WP emoji code
+ */
+remove_action('wp_head', 'print_emoji_detection_script', 7);
+remove_action('wp_print_styles', 'print_emoji_styles');
+remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+remove_action( 'admin_print_styles', 'print_emoji_styles' );
