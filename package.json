@@ -1,0 +1,32 @@
+{
+  "name": "qul-wp-starter",
+  "version": "1.0.0",
+  "description": "An _s based starter theme for QUL WordPress sites",
+  "author": "Paul Clifford <clifford@queensu.ca>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qulib/qul-wp-starter"
+  },
+  "scripts": {
+    "autoprefixer": "postcss -u autoprefixer -r ./style.css",
+    "build:css": "run-s sass autoprefixer",
+    "build:js": "run-s uglify",
+    "build": "run-s build:*",
+    "sass": "node-sass --output-style expanded -o . sass",
+    "serve": "browser-sync start --proxy \"localhost\" --files \"./*.css, js/*.js\"",
+    "uglify": "uglifyjs js/*.js -m -c -o js/bundle.min.js",
+    "watch:css": "onchange \"sass\" -- run-s build:css",
+    "watch:js": "onchange \"js\" -- run-s build:js",
+    "watch": "run-p serve watch:*"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.2.2",
+    "browser-sync": "^2.18.13",
+    "node-sass": "^4.7.2",
+    "npm-run-all": "^4.1.2",
+    "onchange": "^3.3.0",
+    "postcss-cli": "^4.1.1",
+    "uglify-js": "^3.2.1"
+  }
+}
